@@ -48,8 +48,8 @@ class Router(object):
         self.quit_quit = False
         self.current_controller = None  # 当前controller
 
-        self.switch_queue = Queue.Queue(0)
-        self.key_queue = Queue.Queue(0)  # 按键队列
+        self.switch_queue = Queue.Queue()
+        self.key_queue = Queue.Queue()  # 按键队列
 
         self.view_control_map = {
             'main': MainController(self.player, self.data, self.key_queue),
@@ -97,6 +97,18 @@ class Router(object):
             self.key_queue.put(k)
 
 
+def get_free_port():
+    """
+    随机可用端口
+    """
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind(("", 0))
+    free_port = s.getsockname()[1]
+    s.close()
+    return free_port
+
+
 def main():
     router = Router()
 
@@ -108,7 +120,7 @@ def main():
         router.key_queue.put(request.form['ch'])
         return 'OK'
 
-    app.run()
+    app.run(port=get_free_port())
 
 
 if __name__ == '__main__':
