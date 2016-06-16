@@ -77,9 +77,9 @@ class Config(object):
 
         self.login_data = self.get_login_data()
 
-    def output(args):
+    def output(self, args):
         def _deco(func):
-            def _func(self):
+            def _func():
                 print '\033[31m♥\033[0m ' + args,
                 tmp = func(self)
                 print ' [\033[32m OK \033[0m]'
@@ -95,7 +95,7 @@ class Config(object):
         """
         if os.path.exists(PATH_TOKEN):
             # 使用上次登录保存的token
-            with open(PATH_TOKEN, 'r') as f:
+            with open(PATH_TOKEN) as f:
                 login_data = pickle.load(f)
             if 'cookies' not in login_data:
                 login_data = request_token()
@@ -163,7 +163,7 @@ class Config(object):
                 F.write(CONFIG)
         else:
             config = ConfigParser.ConfigParser()
-            with open(PATH_CONFIG, 'r') as cfgfile:
+            with open(PATH_CONFIG) as cfgfile:
                 config.readfp(cfgfile)
                 options = config.options('key')
                 for option in options:
@@ -175,7 +175,7 @@ class Config(object):
     @property
     def history(self):
         try:
-            with open(PATH_HISTORY, 'r') as f:
+            with open(PATH_HISTORY) as f:
                 history = pickle.load(f)
         except IOError:
             history = []
