@@ -77,9 +77,9 @@ class Config(object):
 
         self.login_data = self.get_login_data()
 
-    def output(self, args):
+    def output(args):
         def _deco(func):
-            def _func():
+            def _func(self):
                 print '\033[31m♥\033[0m ' + args,
                 tmp = func(self)
                 print ' [\033[32m OK \033[0m]'
